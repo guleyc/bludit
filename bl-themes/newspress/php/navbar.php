@@ -1,3 +1,29 @@
+<!-- Top Info Bar -->
+<div class="np-topbar">
+	<div class="container">
+		<div class="np-topbar-inner">
+			<span class="np-topbar-date">
+				<i class="bi bi-calendar3" aria-hidden="true"></i>
+				<span id="np-date-display"></span>
+			</span>
+			<span class="np-topbar-tagline"><?php echo htmlspecialchars($site->slogan()); ?></span>
+			<div class="np-topbar-social">
+				<?php foreach (Theme::socialNetworks() as $key => $label): ?>
+				<a href="<?php echo $site->{$key}(); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo $label; ?>" class="np-topbar-social-link">
+					<img src="<?php echo DOMAIN_THEME . 'img/' . $key . '.svg' ?>" alt="" aria-hidden="true" class="np-topbar-social-icon" />
+				</a>
+				<?php endforeach; ?>
+				<?php if (Theme::rssUrl()): ?>
+				<a href="<?php echo Theme::rssUrl() ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo $L->get('RSS Feed'); ?>" class="np-topbar-social-link">
+					<i class="bi bi-rss-fill np-topbar-rss" aria-hidden="true"></i>
+				</a>
+				<?php endif; ?>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Main Navbar -->
 <header class="np-navbar" role="banner">
 	<div class="np-navbar-inner container">
 
@@ -17,6 +43,14 @@
 
 		<nav class="collapse navbar-collapse np-nav-menu" id="npNavMenu" aria-label="<?php echo $L->get('Main navigation'); ?>">
 			<ul class="np-nav-list" role="list">
+
+				<!-- Home link -->
+				<li class="np-nav-item">
+					<a class="np-nav-link<?php echo ($WHERE_AM_I !== 'page') ? ' np-nav-link--active' : ''; ?>"
+						href="<?php echo Theme::siteUrl(); ?>">
+						<?php echo $L->get('Home'); ?>
+					</a>
+				</li>
 
 				<!-- Blog link (when homepage is set to a static page) -->
 				<?php if ($site->homepage()): ?>
@@ -39,25 +73,12 @@
 				</li>
 				<?php endforeach ?>
 
-				<!-- Social Networks -->
-				<?php foreach (Theme::socialNetworks() as $key => $label): ?>
-				<li class="np-nav-item">
-					<a class="np-nav-link np-nav-social" href="<?php echo $site->{$key}(); ?>"
-						target="_blank" rel="noopener noreferrer" aria-label="<?php echo $label; ?>">
-						<img class="np-social-icon" src="<?php echo DOMAIN_THEME . 'img/' . $key . '.svg' ?>"
-							alt="" aria-hidden="true" />
-						<span class="np-social-label"><?php echo $label; ?></span>
-					</a>
-				</li>
-				<?php endforeach; ?>
-
-				<!-- RSS -->
-				<?php if (Theme::rssUrl()): ?>
-				<li class="np-nav-item">
-					<a class="np-nav-link np-nav-rss" href="<?php echo Theme::rssUrl() ?>"
-						target="_blank" rel="noopener noreferrer" aria-label="<?php echo $L->get('RSS Feed'); ?>">
-						<i class="bi bi-rss-fill" aria-hidden="true"></i>
-						<span class="np-social-label"><?php echo $L->get('RSS'); ?></span>
+				<!-- Search icon (visible on mobile only, full-width search) -->
+				<?php if (pluginActivated('pluginSearch')): ?>
+				<li class="np-nav-item np-nav-item--search-mobile">
+					<a class="np-nav-link" href="<?php echo Theme::siteUrl(); ?>search/" aria-label="<?php echo $L->get('Search'); ?>">
+						<i class="bi bi-search" aria-hidden="true"></i>
+						<span class="np-social-label"><?php echo $L->get('Search'); ?></span>
 					</a>
 				</li>
 				<?php endif; ?>
@@ -67,3 +88,40 @@
 
 	</div>
 </header>
+
+<!-- Secondary Category Nav (desktop only) -->
+<?php
+$navCategories = [];
+if (!empty($content)) {
+	foreach ($content as $p) {
+		$catKey = $p->categoryKey();
+		$catName = $p->category();
+		if ($catKey && !isset($navCategories[$catKey])) {
+			$navCategories[$catKey] = ['name' => $catName, 'url' => $p->categoryPermalink()];
+		}
+	}
+}
+?>
+<?php if (!empty($navCategories)): ?>
+<nav class="np-catbar" aria-label="<?php echo $L->get('Categories'); ?>">
+	<div class="container">
+		<ul class="np-catbar-list" role="list">
+			<?php foreach ($navCategories as $catData): ?>
+			<li class="np-catbar-item">
+				<a class="np-catbar-link" href="<?php echo $catData['url']; ?>"><?php echo $catData['name']; ?></a>
+			</li>
+			<?php endforeach; ?>
+		</ul>
+	</div>
+</nav>
+<?php endif; ?>
+
+<script>
+(function() {
+	var d = document.getElementById('np-date-display');
+	if (d) {
+		var now = new Date();
+		d.textContent = now.toLocaleDateString(undefined, {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+	}
+})();
+</script>
