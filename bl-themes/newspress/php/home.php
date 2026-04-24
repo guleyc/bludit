@@ -28,14 +28,14 @@ if (!empty($content)) {
 <div class="np-search-bar">
 	<div class="container">
 		<form class="np-search-form" role="search" onsubmit="return npSearchNow();">
-			<label for="np-search-input" class="np-sr-only"><?php $language->p('Search') ?></label>
+			<label for="np-search-input" class="np-sr-only"><?php echo $L->get('Search') ?></label>
 			<div class="np-search-wrap">
 				<i class="bi bi-search np-search-icon" aria-hidden="true"></i>
 				<input id="np-search-input" class="np-search-input" type="search"
-					placeholder="<?php $language->p('Search') ?>"
-					aria-label="<?php $language->p('Search') ?>"
+					placeholder="<?php echo $L->get('Search') ?>"
+					aria-label="<?php echo $L->get('Search') ?>"
 					value="<?php echo ($WHERE_AM_I === 'search' ? htmlspecialchars($searchPlugin->getSearchTerm()) : '') ?>">
-				<button type="submit" class="np-search-btn"><?php $language->p('Search') ?></button>
+				<button type="submit" class="np-search-btn"><?php echo $L->get('Search') ?></button>
 			</div>
 		</form>
 	</div>
@@ -52,7 +52,7 @@ function npSearchNow() {
 
 <?php if (empty($content)): ?>
 <div class="container np-empty">
-	<p><?php $language->p('No pages found') ?></p>
+	<p><?php echo $L->get('No pages found') ?></p>
 </div>
 <?php endif ?>
 
