@@ -34,7 +34,7 @@
 	<?php Theme::plugins('siteHead'); ?>
 </head>
 
-<body>
+<body class="np-page-wrapper">
 
 	<!-- Skip to main content link for accessibility -->
 	<a class="np-skip-link" href="#main-content"><?php echo $L->get('Skip to main content'); ?></a>
@@ -46,7 +46,7 @@
 	<?php include(THEME_DIR_PHP . 'navbar.php'); ?>
 
 	<!-- Content -->
-	<main id="main-content" role="main">
+	<main id="main-content" role="main" class="np-main-content">
 	<?php
 	if ($WHERE_AM_I == 'page') {
 		include(THEME_DIR_PHP . 'page.php');
